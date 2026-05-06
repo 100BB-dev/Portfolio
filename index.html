@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BAEK SEUNGHUN — Portfolio 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+KR:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0d0d0b;
+    --surface: #161614;
+    --border: rgba(255,255,255,0.07);
+    --text: #e8e4dc;
+    --muted: #7a7570;
+    --accent: #e8630a;
+    --accent2: #f5a623;
+    --white: #f0ece4;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans KR', sans-serif;
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
+
+  /* ── GRAIN ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 999;
+    opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+  }
+
+  /* ── NAV ── */
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem 4rem;
+    border-bottom: 0.5px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: rgba(13,13,11,0.93);
+    backdrop-filter: blur(16px);
+    z-index: 100;
+  }
+  .logo { font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.18em; color: var(--muted); }
+  .nav-links { display: flex; gap: 2.5rem; }
+  .nav-links a { font-size: 12px; letter-spacing: 0.08em; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--accent); }
+
+
+  /* ── HERO ── */
+  .hero {
+    padding: 6rem 4rem 5rem;
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 4rem;
+    align-items: end;
+    border-bottom: 0.5px solid var(--border);
+    min-height: 88vh;
+  }
+  .hero-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    color: var(--accent);
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 0.6s 0.1s forwards;
+  }
+  .hero-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(5rem, 12vw, 10rem);
+    line-height: 0.88;
+    letter-spacing: 0.02em;
+    color: var(--white);
+    opacity: 0;
+    animation: fadeUp 0.7s 0.2s forwards;
+  }
+  .hero-name span { color: var(--accent); }
+  .hero-role {
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--muted);
+    margin-top: 1.8rem;
+    line-height: 1.8;
+    max-width: 520px;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.38s forwards;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 3rem;
+    margin-top: 3rem;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.52s forwards;
+  }
+  .stat-item { border-left: 1px solid var(--accent); padding-left: 1.2rem; }
+  .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 2.4rem; color: var(--accent2); line-height: 1; }
+  .stat-label { font-size: 11px; color: var(--muted); margin-top: 3px; letter-spacing: 0.06em; }
+  .edu-row {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.64s forwards;
+  }
+  .edu-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    border: 0.5px solid rgba(232,99,10,0.3);
+    padding: 5px 12px;
+    color: var(--muted);
+  }
+  .edu-pill span { color: var(--accent2); }
+
+  .contact-card {
+    border: 0.5px solid var(--border);
+    padding: 2rem;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.45s forwards;
+    align-self: start;
+    margin-top: 4rem;
+  }
+  .contact-title { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.18em; color: var(--accent); margin-bottom: 1.2rem; }
+  .contact-card p { font-size: 12px; color: var(--muted); margin-bottom: 0.7rem; display: flex; align-items: center; gap: 0.7rem; }
+  .contact-card p:last-child { margin-bottom: 0; }
+  .contact-card p span { color: var(--text); }
+
+  /* ── SECTION HEADER ── */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    padding: 3rem 4rem 2rem;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .section-num { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--accent); letter-spacing: 0.18em; }
+  .section-title { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 0.06em; color: var(--white); }
+  .section-line { flex: 1; height: 0.5px; background: var(--border); }
+
+  /* ── SKILLS ── */
+  .skills-section {
+    padding: 2rem 4rem 2.5rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+  .skill-group-title { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.18em; color: var(--accent); margin-bottom: 1rem; }
+  .skill-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag {
+    font-size: 11px;
+    border: 0.5px solid var(--border);
+    padding: 5px 11px;
+    color: var(--muted);
+    transition: border-color 0.2s, color 0.2s;
+    cursor: default;
+  }
+  .tag:hover { border-color: var(--accent); color: var(--accent); }
+  .tag.highlight { border-color: rgba(232,99,10,0.4); color: var(--text); }
+  .tag.new-tag { border-color: rgba(245,166,35,0.5); color: var(--accent2); }
+
+  /* ── CERTS ── */
+  .certs-section {
+    padding: 0 4rem 2.5rem;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+  .cert-card { border: 0.5px solid var(--border); padding: 1.2rem; transition: border-color 0.2s; }
+  .cert-card:hover { border-color: var(--accent); }
+  .cert-name { font-family: 'DM Mono', monospace; font-size: 14px; font-weight: 500; color: var(--accent2); margin-bottom: 0.4rem; }
+  .cert-full { font-size: 11px; color: var(--muted); margin-bottom: 0.6rem; line-height: 1.5; }
+  .cert-date { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); }
+
+  /* ── PROJECTS ── */
+  .projects-section { padding: 0 4rem 2.5rem; }
+  .project-card {
+    border: 0.5px solid var(--border);
+    margin-bottom: 1rem;
+    overflow: hidden;
+    transition: border-color 0.3s;
+    cursor: pointer;
+  }
+  .project-card:hover { border-color: rgba(232,99,10,0.5); }
+  .project-header {
+    display: grid;
+    grid-template-columns: 48px 1fr 32px;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.4rem 1.8rem;
+  }
+  .project-num { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--accent); }
+  .project-title { font-size: 14px; font-weight: 500; color: var(--text); line-height: 1.4; }
+  .project-title-en { font-size: 11px; color: var(--muted); margin-top: 3px; font-style: italic; }
+  .project-toggle { font-size: 20px; color: var(--muted); transition: transform 0.35s, color 0.3s; text-align: right; line-height: 1; user-select: none; }
+  .project-card.open .project-toggle { transform: rotate(45deg); color: var(--accent); }
+  .project-body { max-height: 0; overflow: hidden; transition: max-height 0.45s cubic-bezier(0.76,0,0.24,1); }
+  .project-card.open .project-body { max-height: 500px; }
+  .project-content {
+    padding: 0 1.8rem 1.8rem;
+    border-top: 0.5px solid var(--border);
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1.2rem;
+  }
+  .project-meta { padding-top: 1.2rem; }
+  .meta-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.18em; color: var(--accent); margin-bottom: 0.5rem; }
+  .meta-value { font-size: 12px; color: var(--muted); line-height: 1.7; }
+  .meta-highlight { color: var(--accent2); font-weight: 500; }
+  .project-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 0.6rem; }
+  .project-tag {
+    font-size: 10px;
+    border: 0.5px solid rgba(232,99,10,0.3);
+    padding: 3px 7px;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+  }
+
+  /* ── EXPERIENCE ── */
+  .exp-section { padding: 0 4rem 2.5rem; }
+  .exp-item {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 2rem;
+    padding: 1.4rem 0;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .exp-item:last-child { border-bottom: none; }
+  .exp-date { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); padding-top: 3px; line-height: 1.7; }
+  .exp-title { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+  .exp-org { font-size: 12px; color: var(--muted); }
+  .exp-detail { font-size: 11px; color: var(--muted); margin-top: 8px; line-height: 1.7; opacity: 0.7; }
+
+  /* ── AWARDS ── */
+  .awards-section {
+    padding: 0 4rem 2.5rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  .award-card { border: 0.5px solid var(--border); padding: 1.4rem 1.8rem; transition: border-color 0.2s; }
+  .award-card:hover { border-color: var(--accent2); }
+  .award-title { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+  .award-org { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+  .award-year { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--accent); }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 2.5rem 4rem;
+    border-top: 0.5px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .footer-text { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); }
+  .footer-email { font-size: 13px; color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+  .footer-email:hover { opacity: 0.7; }
+  .back-top {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    cursor: pointer;
+    transition: color 0.2s;
+    background: none;
+    border: none;
+  }
+  .back-top:hover { color: var(--accent); }
+
+  /* ── ANIMATION ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── SCROLL REVEAL ── */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s, transform 0.6s; }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 1.2rem 2rem; }
+    .hero { grid-template-columns: 1fr; padding: 4rem 2rem 3rem; min-height: auto; gap: 2rem; }
+    .contact-card { margin-top: 0; }
+    .section-header, .skills-section, .certs-section, .projects-section, .exp-section, .awards-section, footer { padding-left: 2rem; padding-right: 2rem; }
+    .certs-section { grid-template-columns: 1fr 1fr; }
+    .skills-section { grid-template-columns: 1fr; }
+    .project-content { grid-template-columns: 1fr; }
+    .exp-item { grid-template-columns: 1fr; gap: 0.5rem; }
+    .awards-section { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <span class="logo">BSH — PORTFOLIO 2026</span>
+  <div class="nav-links">
+    <a href="#skills">Skills</a>
+    <a href="#research">Research</a>
+    <a href="#experience">Experience</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="contact">
+  <div>
+    <p class="hero-tag">✦ 고려대학교 건축사회환경공학과 석사 · 스마트모빌리티 운영·계획 연구실</p>
+    <h1 class="hero-name">BAEK<br><span>SEUNG</span>HUN</h1>
+    <p class="hero-role"><span style="white-space:nowrap">모빌리티 및 물류 데이터 분석 및 ML/DL 기반 예측 모델 전문가.</span> <span style="white-space:nowrap">시계열 분석부터 최적화 알고리즘까지, 데이터로 인사이트를 정량적으로 도출합니다.</span></p>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-num">9+</div>
+        <div class="stat-label">연구 / 프로젝트</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">4</div>
+        <div class="stat-label">데이터 자격증</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">4.35</div>
+        <div class="stat-label">석사 학점 / 4.5</div>
+      </div>
+    </div>
+    <div class="edu-row">
+      <div class="edu-pill">학사 전체 <span>3.95</span> / 전공 <span>4.04</span></div>
+      <div class="edu-pill">석사 전체 <span>4.35</span> / 전공 <span>4.33</span></div>
+    </div>
+  </div>
+  <div class="contact-card">
+    <p class="contact-title">CONTACT</p>
+    <p>📧 <span>hohohoho245@gmail.com</span></p>
+    <p>📱 <span>010-8209-1192</span></p>
+    <p>📍 <span>서울특별시 은평구</span></p>
+    <p>🎂 <span>1999.10.16</span></p>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<div class="section-header reveal" id="skills">
+  <span class="section-num">01</span>
+  <span class="section-title">TECH STACK</span>
+  <div class="section-line"></div>
+</div>
+<div class="skills-section reveal">
+  <div>
+    <div class="skill-group-title">LANGUAGES & TOOLS</div>
+    <div class="skill-tags">
+      <span class="tag highlight">Python</span>
+      <span class="tag highlight">MySQL</span>
+      <span class="tag">QGIS</span>
+      <span class="tag">Matlab</span>
+      <span class="tag">EMME4</span>
+      <span class="tag">CPLEX</span>
+      <span class="tag">Gurobi</span>
+    </div>
+  </div>
+  <div>
+    <div class="skill-group-title">ANALYSIS METHODS</div>
+    <div class="skill-tags">
+      <span class="tag highlight">Deep Learning</span>
+      <span class="tag highlight">Machine Learning</span>
+      <span class="tag highlight">Logistic Regression</span>
+      <span class="tag">시계열 예측</span>
+      <span class="tag">공간 분석</span>
+      <span class="tag">ALNS / ACO</span>
+      <span class="tag">4단계 수요 추정</span>
+    </div>
+  </div>
+</div>
+
+<!-- CERTS -->
+<div class="section-header reveal">
+  <span class="section-num">02</span>
+  <span class="section-title">CERTIFICATIONS</span>
+  <div class="section-line"></div>
+</div>
+<div class="certs-section reveal">
+  <div class="cert-card">
+    <div class="cert-name">SQLD</div>
+    <div class="cert-full">SQL 개발자</div>
+    <div class="cert-date">2025.09.19</div>
+  </div>
+  <div class="cert-card">
+    <div class="cert-name">DAsP</div>
+    <div class="cert-full">데이터아키텍처 준전문가</div>
+    <div class="cert-date">2025.10.24</div>
+  </div>
+  <div class="cert-card">
+    <div class="cert-name">ADsP</div>
+    <div class="cert-full">데이터분석 준전문가</div>
+    <div class="cert-date">2025.11.28</div>
+  </div>
+  <div class="cert-card">
+    <div class="cert-name">OPIc</div>
+    <div class="cert-full">영어 Intermediate High</div>
+    <div class="cert-date">2025.11.09</div>
+  </div>
+</div>
+
+<!-- RESEARCH & PROJECTS -->
+<div class="section-header reveal" id="research">
+  <span class="section-num">03</span>
+  <span class="section-title">RESEARCH & PROJECTS</span>
+  <div class="section-line"></div>
+</div>
+<div class="projects-section">
+
+  <!-- P01 -->
+  <div class="project-card reveal" onclick="toggle(this)">
+    <div class="project-header">
+      <span class="project-num">P01</span>
+      <div>
+        <div class="project-title">버스전용차로가 소방차 골든타임 준수에 미치는 영향 연구</div>
+        <div class="project-title-en">Effect of Bus-only Lane on Golden Time Compliance in Fire Engine Dispatch</div>
+      </div>
+      <span class="project-toggle">+</span>
+    </div>
+    <div class="project-body">
+      <div class="project-content">
+        <div class="project-meta">
+          <div class="meta-label">기간</div>
+          <div class="meta-value">2025.09 ~ 2025.12</div>
+          <div class="meta-label" style="margin-top:.8rem">방법론</div>
+          <div class="meta-value">이항 로지스틱 회귀 분석<br>QGIS 공간 분석</div>
+        </div>
+        <div class="project-meta">
+          <div class="meta-label">데이터</div>
+          <div class="meta-value">서울시 소방 출동 데이터<br><span class="meta-highlight">약 14,000건</span></div>
+          <div class="meta-label" style="margin-top:.8rem">성과</div>
+          <div class="meta-value">분류 정확도 <span class="meta-highlight">88.38%</span><br>학회 포스터 발표 완료<br>저널 투고 예정</div>
+        </div>
+        <div class="project-meta">
+          <div class="meta-label">키워드</div>
+          <div class="project-tags">
+            <span class="project-tag">Python</span>
+            <span class="project-tag">QGIS</span>
+            <span class="project-tag">로지스틱회귀</span>
+            <span class="project-tag">교통정책</span>
+            <span class="project-tag">공간분석</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- P02 -->
+  <div class="project-card reveal" onclick="toggle(this)">
+    <div class="project-header">
+      <span class="project-num">P02</span>
+      <div>
+        <div class="project-title">버스 정류장 간 속도 예측 머신러닝 연구</div>
+        <div class="project-title-en">Velocity Prediction Between Bus Stops Using ML & Hyperparameter Tuning</div>
+      </div>
+      <span class="project-toggle">+</span>
+    </div>
+    <div class="project-body">
+      <div class="project-content">
+        <div class="project-meta">
+          <div class="meta-label">기간</div>
+          <div class="meta-value">2024.09 ~ 2024.12</div>
+          <div class="meta-label" style="margin-top:.8rem">방법론</div>
+          <div class="meta-value">14개 ML 모델 비교<br>Grid / Randomized Search</div>
+        </div>
+        <div class="project-meta">
+          <div class="meta-label">데이터</div>
+          <div class="meta-value">대전광역시 버스 운행<br>기상·탑승인원·전용차로</div>
+          <div class="meta-label" style="margin-top:.8rem">성과</div>
+          <div class="meta-value">R² <span class="meta-highlight">0.8718 → 0.8852</span><br>XGBoost 최종 R²=0.897</div>
+        </div>
+        <div class="project-meta">
+          <div class="meta-label">키워드</div>
+          <div class="project-tags">
+            <span class="project-tag">XGBoost</span>
+            <span class="project-tag">Extra Trees</span>
+            <span class="project-tag">scikit-learn</span>
+            <span class="project-tag">앙상블</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- P03 -->
+  <div class="project-card reveal" onclick="toggle(this)">
+    <div class="project-header">
+      <span class="project-num">P03</span>
+      <div>
+        <div class="project-title">딥러닝 기반 청평호 수질 예측</div>
+        <div class="project-title-en">Water Quality Prediction using Deep Learning: Cheongpyeong-ho</div>
+      </div>
+      <span class="project-toggle">+</span>
+    </div>
+    <div class="project-body">
+      <div class="project-content">
+        <div class="project-meta">
+          <div class="meta-label">기간</div>
+          <div class="meta-value">2023.09 ~ 2023.12</div>
+          <div class="meta-label" style="margin-top:.8rem">방법론</div>
+          <div class="meta-value">RNN / LSTM<br>하이퍼파라미터 민감도 분석</div>
+        </div>
+        <div class="project-meta">
+          <div class="meta-label">데이터</div>
+          <div class="meta-value">기상·수질 12개 변수<br>(수온·DO·BOD·COD 등)</div>
+          <div class="meta-label" style="margin-top:.8rem">성과</div>
+          <div class="meta-value">RMSE <span class="meta-highlight">0.1346 → 0.1076</span><br>강의 우수 사례 선정</div>
+        </div>
+        <div class="project-meta">
+          <div class="meta-label">키워드</div>
+          <div class="project-tags">
+            <span class="project-tag">RNN</span>
+            <span class="project-tag">LSTM</span>
+            <span class="project-tag">시계열</span>
+            <span class="project-tag">딥러닝</span>
+            <span class="project-tag">수질예측</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- P04 -->
+  <div class="project-card reveal" onclick="toggle(this)">
+    <div class="project-header">
+      <span class="project-num">P04</span>
+      <div>
+        <div class="project-title">다중 구획 CVRP 해결을 위한 개미 군집 알고리즘</div>
+        <div class="project-title-en">Ant Colony Algorithm with K-means Clustering for MC-CVRP</div>
+      </div>
+      <span class="project-toggle">+</span>
+    </div>
+    <div class="project-body">
+      <div class="project-content">
+        <div class="project-meta">
+          <div class="meta-label">기간</div>
+          <div class="meta-value">2024.09 ~ 2024.12</div>
+          <div class="meta-label" style="margin-top:.8rem">방법론</div>
+          <div class="meta-value">K-means 군집화 (용량 반영)<br>ACO + k-opt 후처리</div>
+        </div>
+        <div class="project-meta">
+          <div class="meta-label">검증</div>
+          <div class="meta-value">기존 벤치마크 인스턴스와<br>성능 비교</div>
+          <div class="meta-label" style="margin-top:.8rem">성과</div>
+          <div class="meta-value">기존 최적해 대비 <span class="meta-highlight">3.26%</span> 개선<br>합리적 계산 시간 내 안정적 해</div>
+        </div>
+        <div class="project-meta">
+          <div class="meta-label">키워드</div>
+          <div class="project-tags">
+            <span class="project-tag">ACO</span>
+            <span class="project-tag">K-means</span>
+            <span class="project-tag">k-opt</span>
+            <span class="project-tag">경로최적화</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- R01 -->
+  <div class="project-card reveal" onclick="toggle(this)">
+    <div class="project-header">
+      <span class="project-num">R01</span>
+      <div>
+        <div class="project-title">드론-대중교통 결합 배송 최적화 연구</div>
+        <div class="project-title-en">Pickup and Delivery Problem of Energy-Constrained Drone Combined with Public Transit</div>
+      </div>
+      <span class="project-toggle">+</span>
+    </div>
+    <div class="project-body">
+      <div class="project-content">
+        <div class="project-meta">
+          <div class="meta-label">기간</div>
+          <div class="meta-value">2023.09 ~ 현재</div>
+          <div class="meta-label" style="margin-top:.8rem">방법론</div>
+          <div class="meta-value">ALNS + FSAS 휴리스틱<br>Fuzzy C-means 군집화</div>
+        </div>
+        <div class="project-meta">
+          <div class="meta-label">구조</div>
+          <div class="meta-value">First / Middle / Last-mile<br>배송 분할 시스템 설계</div>
+          <div class="meta-label" style="margin-top:.8rem">성과</div>
+          <div class="meta-value"><span class="meta-highlight">특허 출원 진행 중</span><br>해외 저널 투고 준비 중</div>
+        </div>
+        <div class="project-meta">
+          <div class="meta-label">키워드</div>
+          <div class="project-tags">
+            <span class="project-tag">ALNS</span>
+            <span class="project-tag">드론배송</span>
+            <span class="project-tag">CPLEX</span>
+            <span class="project-tag">최적화</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- R02 -->
+  <div class="project-card reveal" onclick="toggle(this)">
+    <div class="project-header">
+      <span class="project-num">R02</span>
+      <div>
+        <div class="project-title">강화학습 기반 Ride-sharing 최적화 알고리즘 개발</div>
+        <div class="project-title-en">RL-based ALNS for Incompatibility-aware Ridesharing Problem</div>
+      </div>
+      <span class="project-toggle">+</span>
+    </div>
+    <div class="project-body">
+      <div class="project-content">
+        <div class="project-meta">
+          <div class="meta-label">기간</div>
+          <div class="meta-value">2025.03 ~ 2025.12</div>
+          <div class="meta-label" style="margin-top:.8rem">방법론</div>
+          <div class="meta-value">UCB 기반 강화학습<br>Adaptive Large Neighborhood Search</div>
+        </div>
+        <div class="project-meta">
+          <div class="meta-label">성과</div>
+          <div class="meta-value">중규모 <span class="meta-highlight">4.28%</span> 개선<br>대규모 <span class="meta-highlight">6.84%</span> 개선</div>
+          <div class="meta-label" style="margin-top:.8rem">현황</div>
+          <div class="meta-value">해외 저널 투고 작업 중<br>전 과정 단독 수행</div>
+        </div>
+        <div class="project-meta">
+          <div class="meta-label">키워드</div>
+          <div class="project-tags">
+            <span class="project-tag">강화학습</span>
+            <span class="project-tag">ALNS</span>
+            <span class="project-tag">Gurobi</span>
+            <span class="project-tag">자율주행</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- EXPERIENCE -->
+<div class="section-header reveal" id="experience">
+  <span class="section-num">04</span>
+  <span class="section-title">EXPERIENCE</span>
+  <div class="section-line"></div>
+</div>
+<div class="exp-section">
+  <div class="exp-item reveal">
+    <div class="exp-date">2024.03 ~ 2026.02</div>
+    <div>
+      <div class="exp-title">교육조교</div>
+      <div class="exp-org">고려대학교 공과대학 건축사회환경공학부</div>
+      <div class="exp-detail">머신러닝·딥러닝 기반 교통 데이터 분석 연구 / 강화학습 결합 최적화 알고리즘 연구 / 교통 수요 추정 타당성 조사 용역 수행</div>
+    </div>
+  </div>
+  <div class="exp-item reveal">
+    <div class="exp-date">2023.03 ~ 2024.02</div>
+    <div>
+      <div class="exp-title">학부연구생</div>
+      <div class="exp-org">고려대학교 스마트모빌리티 운영·계획 연구실</div>
+      <div class="exp-detail">드론-대중교통 결합 물류 배송 최적화 연구 참여 / 열차 정차 시간 예측 연구 데이터 전처리 및 분석 / 코로나 기간 대중교통 이용 변화 도시별 시각화</div>
+    </div>
+  </div>
+  <div class="exp-item reveal">
+    <div class="exp-date">2018.11 ~ 2019.11</div>
+    <div>
+      <div class="exp-title">봉사 동아리 로타랙트 회장</div>
+      <div class="exp-org">고려대학교 (약 100명 규모)</div>
+      <div class="exp-detail">2년간 총 29회, 106시간 봉사활동 / 어린이날 아동권리축제, 경로식당 배식, 장애아동 돌봄 등 기획·운영</div>
+    </div>
+  </div>
+  <div class="exp-item reveal">
+    <div class="exp-date">2020.05 ~ 2021.11</div>
+    <div>
+      <div class="exp-title">병장 만기제대</div>
+      <div class="exp-org">육군 화생방제독 병과</div>
+    </div>
+  </div>
+</div>
+
+<!-- AWARDS -->
+<div class="section-header reveal">
+  <span class="section-num">05</span>
+  <span class="section-title">AWARDS</span>
+  <div class="section-line"></div>
+</div>
+<div class="awards-section reveal">
+  <div class="award-card">
+    <div class="award-title">학술연구회 지원사업 우수팀</div>
+    <div class="award-org">고려대학교 대학원 혁신본부</div>
+    <div class="award-year">2024</div>
+  </div>
+  <div class="award-card">
+    <div class="award-title">Future Mobility 아이디어 경진대회 우수상</div>
+    <div class="award-org">한국자동차연구원 (KATECH)</div>
+    <div class="award-year">2024</div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-text">© 2026 BAEK SEUNGHUN — 고려대학교 건축사회환경공학과 석사</span>
+  <a href="mailto:hohohoho245@gmail.com" class="footer-email">hohohoho245@gmail.com →</a>
+  <button class="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ TOP</button>
+</footer>
+
+<script>
+  // 프로젝트 카드 토글
+  function toggle(card) {
+    const wasOpen = card.classList.contains('open');
+    document.querySelectorAll('.project-card.open').forEach(c => c.classList.remove('open'));
+    if (!wasOpen) card.classList.add('open');
+  }
+
+  // 스크롤 reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
